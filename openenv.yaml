@@ -1,0 +1,55 @@
+name: energy_grid_balancing
+version: "1.0.0"
+description: >
+  24-hour electricity grid balancing simulation. AI agent acts as grid operator,
+  managing generation dispatch, battery storage, and emergency response under
+  real-world disruptions. Validated against NERC BAL-001, Texas 2021, California 2022.
+
+tasks:
+  - id: task_easy
+    difficulty: easy
+    pass_threshold: 0.60
+    real_world_ref: "Standard grid operations — morning ramp + wind lull"
+
+  - id: task_medium
+    difficulty: medium
+    pass_threshold: 0.60
+    real_world_ref: "California September 2022 — heatwave + solar cliff"
+
+  - id: task_hard
+    difficulty: hard
+    pass_threshold: 0.60
+    real_world_ref: "Texas February 2021 — cascading failure, 4.5M homes, 246 deaths"
+
+reward:
+  range: [-1.0, 1.0]
+  breakdown:
+    balance_signal:    "supply≈demand → NERC BAL-001"
+    frequency_penalty: "Hz deviation from 50.0 → NERC PRC-024"
+    cost_efficiency:   "generation cost vs baseline"
+    renewable_bonus:   "% renewable in mix"
+    shed_penalty:      "load shedding → IEEE 1547"
+    blackout_penalty:  "-0.50 per blackout interval"
+
+real_world_validation:
+  benchmarks:
+    texas_2021_uptime:        67.0   # % — ERCOT public data
+    california_2022_uptime:   91.0   # % — CAISO public data
+    nerc_standard_uptime:     99.97  # % — NERC BAL-001-2
+    eu_renewable_target_2025: 42.5   # % — EU policy
+  human_impact_metrics:
+    homes_per_mw:    416    # EIA US average
+    hospital_mw:     5.0   # typical hospital load
+    co2_coal_kg_mwh: 820   # IPCC coal emission factor
+
+api:
+  port: 7860
+  endpoints:
+    - POST /reset
+    - POST /step
+    - GET  /state
+    - POST /grade
+    - GET  /tasks
+    - GET  /health
+    - GET  /docs
+    - GET  /real_world_benchmarks
