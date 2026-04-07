@@ -69,12 +69,12 @@ Set provider and model values through environment variables instead of hardcodin
 ```bash
 export API_BASE_URL="https://router.huggingface.co/v1"
 export MODEL_NAME="openai/gpt-oss-20b"
-export HF_TOKEN="your_huggingface_token_here"
+export HF_TOKEN="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"
 ```
 
 ### Groq
 
 ```bash
 export GROQ_API_BASE_URL="https://api.groq.com/openai/v1"
-export GROQ_API_KEY="your_groq_api_key_here"
+export GROQ_API_KEY="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"
 ```
