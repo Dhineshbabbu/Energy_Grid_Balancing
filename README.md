@@ -59,22 +59,3 @@ real-world disruptions. Validated against NERC standards and historical crises.
 | `POST /grade` | Score from 0.0 to 1.0 |
 | `GET /real_world_benchmarks` | Texas, California, and NERC data |
 | `GET /docs` | Swagger UI |
-
-## 🤖 LLM API Configuration
-
-Set provider and model values through environment variables instead of hardcoding secrets in source files. The current code already reads API base URL, model name, and token values from environment variables in the CLI flow, which is the right pattern to follow. [file:1]
-
-### Hugging Face
-
-```bash
-export API_BASE_URL="https://router.huggingface.co/v1"
-export MODEL_NAME="openai/gpt-oss-20b"
-export HF_TOKEN="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"
-```
-
-### Groq
-
-```bash
-export GROQ_API_BASE_URL="https://api.groq.com/openai/v1"
-export GROQ_API_KEY="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"
-```
