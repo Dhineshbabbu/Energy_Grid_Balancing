@@ -40,15 +40,15 @@ class GradeReq(BaseModel):
     task_id: str
 
 
-@app.get("/openenv/health")
+@app.get("/health")
 def health():
     return {"status": "ok", "env": "energy_grid_balancing_v1"}
 
-@app.post("/openenv/reset")
+@app.post("/reset")
 def reset(req: ResetReq):
     return JSONResponse(_env.reset(task_id=req.task_id, seed=req.seed))
 
-@app.post("/openenv/step")
+@app.post("/step")
 def step(req: StepReq):
     try:
         return JSONResponse(_env.step({
@@ -56,18 +56,18 @@ def step(req: StepReq):
     except RuntimeError as e:
         raise HTTPException(400, str(e))
 
-@app.get("/openenv/state")
+@app.get("/state")
 def state():
     return JSONResponse(_env.state())
 
-@app.post("/openenv/grade")
+@app.post("/grade")
 def grade(req: GradeReq):
     s = _env.state()
     if not s["done"]:
         raise HTTPException(400, "Episode not finished yet.")
     return JSONResponse(run_grade(req.task_id, s))
 
-@app.get("/openenv/tasks")
+@app.get("/tasks")
 def tasks():
     return JSONResponse({"tasks": [
         {
@@ -93,14 +93,14 @@ def tasks():
         },
     ]})
 
-@app.get("/openenv/spec")
+@app.get("/spec")
 def spec():
     p = Path(__file__).resolve().parent.parent / "openenv.yaml"
     if not p.exists():
         raise HTTPException(404, "openenv.yaml not found")
     return JSONResponse(yaml.safe_load(p.read_text()))
 
-@app.get("/openenv/real_world_benchmarks")
+@app.get("/real_world_benchmarks")
 def benchmarks():
     return JSONResponse({
         "texas_2021":         {"uptime_percent": 67.0,  "deaths": 246, "homes_affected": 4_500_000},
